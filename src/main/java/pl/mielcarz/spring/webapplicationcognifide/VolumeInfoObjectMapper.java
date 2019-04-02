@@ -1,6 +1,7 @@
 package pl.mielcarz.spring.webapplicationcognifide;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,24 +13,25 @@ import pl.mielcarz.spring.webapplicationcognifide.pojo.VolumeInfo;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class VolumeInfoObjectMapper {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private ObjectMapper objectMapper;
     private JsonNode jsonNode;
+    public List<VolumeInfo> volumeInfoList;
+
 
     public void readJsonWithObjectMapper() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        List<VolumeInfo> volumeInfoList = new ArrayList<>();
+        volumeInfoList = new ArrayList<>();
         JsonNode root = objectMapper.readTree(new File("books.json")); // read as JsonNode
-        JsonNode items = root.at("/items");
-        //  System.out.println(items);
+        JsonNode itemsRoot = root.at("/items");
+        MainJsonNode mainJsonNode = new MainJsonNode();
 
-        ArrayNode array = (ArrayNode) items;
+        ArrayNode array = (ArrayNode) itemsRoot;
         array.forEach(n -> {
 
             VolumeInfo volumeInfo = objectMapper.convertValue(n.get("volumeInfo"), VolumeInfo.class);
@@ -37,10 +39,28 @@ public class VolumeInfoObjectMapper {
                 volumeInfo.setIsbn(n.path("id").textValue());
             }
 
-
             volumeInfoList.add(volumeInfo);
-            System.out.println(volumeInfo);
+
         });
+
+    }
+
+    /**
+     * Methode get deserialized list of books and return properties and serialized it to JSON wihout null properties.
+     */
+    public void serializeToJsonWithoutNulls(){
+
+        List<VolumeInfo> filterSortedVolume = Optional.ofNullable(volumeInfoList)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                // .filter(n -> Arrays.stream(n.getAuthors()).anyMatch("Clifford Geertz"::contains)) //filtering null in Strings
+                .collect(Collectors.toList()); //back to List of Strings*/
+
+        try {
+          objectMapper.writeValueAsString(filterSortedVolume);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
     }
 
