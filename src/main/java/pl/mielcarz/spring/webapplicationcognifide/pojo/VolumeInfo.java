@@ -1,5 +1,6 @@
 package pl.mielcarz.spring.webapplicationcognifide.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -23,8 +24,6 @@ import java.util.Arrays;
             "averageRating",
             "authors",
             "categories",
-
-
 
     })
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -156,6 +155,14 @@ import java.util.Arrays;
             this.categories = categories;
         }
 
+        public boolean categoryExist(String[] categoryArray, String singleArray) {
+            if(categoryArray == null){
+            return false;
+        }
+            return Arrays.stream(categoryArray).anyMatch(singleArray::equals);
+        }
+
+        @JsonIgnore
         public boolean isbnSetter(){
             for (IndustryIdentifier identifier:industryIdentifiers) {
                 if (identifier.isbnExist()){

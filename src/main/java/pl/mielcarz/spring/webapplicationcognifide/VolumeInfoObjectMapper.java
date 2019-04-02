@@ -91,15 +91,29 @@ public class VolumeInfoObjectMapper {
     }
 
     public List<VolumeInfo> findByISBN(VolumeInfoObjectMapper volumeInfoObjectMapper, String isbn) throws JsonProcessingException {
-        List<VolumeInfo> myList = new ArrayList<>();
+        List<VolumeInfo> resultList;
 
-        myList =
+        resultList =
                 volumeInfoObjectMapper.serializeToJsonWithoutNulls()
                         .stream()
                         .filter(p -> p.getIsbn().equals(isbn))
                         .collect(Collectors.toList());
 
-        return myList;
+        return resultList;
+    }
+
+
+
+    public List<VolumeInfo> findCategories(VolumeInfoObjectMapper volumeInfoObjectMapper, String category) throws JsonProcessingException {
+        List<VolumeInfo> resultList;
+
+        resultList =
+                volumeInfoObjectMapper.serializeToJsonWithoutNulls()
+                        .stream()
+                        .filter(n -> n.categoryExist(n.getCategories(), category))
+                        .collect(Collectors.toList());
+
+        return resultList;
     }
 
 

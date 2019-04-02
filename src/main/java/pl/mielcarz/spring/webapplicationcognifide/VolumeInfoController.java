@@ -29,13 +29,6 @@ public class VolumeInfoController {
     }
 
 
-    @RequestMapping(value = "/ex", method = GET)
-    @ResponseBody
-    public List<VolumeInfo> getFoosBySimplePath() throws IOException {
-        volumeInfoObjectMapper.getObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        return volumeInfoObjectMapper.serializeToJsonWithoutNulls();
-    }
-
     @RequestMapping(value = "/obj", method = GET)
     @ResponseBody
     public List<VolumeInfo> getFoosBySimpleP() throws IOException {
@@ -43,12 +36,20 @@ public class VolumeInfoController {
         return volumeInfoObjectMapper.serializeToJsonWithoutNulls() ;
     }
 
-    @RequestMapping(value = "/ex/obj/{id}", method = GET)
+    @RequestMapping(value = "/books/isbn/{id}", method = GET)
     @ResponseBody
     public List<VolumeInfo> getByISBN(
             @PathVariable("id") String id) throws JsonProcessingException {
 
-        return  volumeInfoObjectMapper.findByISBN(this.volumeInfoObjectMapper,id);
+        return  volumeInfoObjectMapper.findByISBN(volumeInfoObjectMapper,id);
+    }
+
+    @RequestMapping(value = "/books/category/{category}", method = GET)
+    @ResponseBody
+    public List<VolumeInfo> getByCategory(
+            @PathVariable("category") String category) throws JsonProcessingException {
+
+        return  volumeInfoObjectMapper.findCategories(volumeInfoObjectMapper,category);
     }
 
 }
