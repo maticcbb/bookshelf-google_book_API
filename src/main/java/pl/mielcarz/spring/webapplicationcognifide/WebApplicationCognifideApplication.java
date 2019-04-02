@@ -11,8 +11,7 @@ public class WebApplicationCognifideApplication {
     public static void main(String[] args) throws IOException {
         SpringApplication.run(WebApplicationCognifideApplication.class, args);
 
-        VolumeInfoObjectMapper volumeInfoObjectMapper= new VolumeInfoObjectMapper();
-        volumeInfoObjectMapper.readJsonWithObjectMapper();
+
     }
 
 }

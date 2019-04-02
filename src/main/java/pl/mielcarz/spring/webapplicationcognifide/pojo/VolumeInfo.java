@@ -23,7 +23,7 @@ import java.util.Arrays;
             "averageRating",
             "authors",
             "categories",
-            "industryIdentifiers"
+
 
 
     })
@@ -46,15 +46,10 @@ import java.util.Arrays;
         private double averageRating;
         private String[] authors;
         private String[] categories;
-        @JsonProperty("industryIdentifiers")
-        private IndustryIdentifier[] industryIdentifierList;
+        private IndustryIdentifier[] industryIdentifiers;
 
-        public IndustryIdentifier[] getIndustryIdentifierList() {
-            return industryIdentifierList;
-        }
-
-        public void setIndustryIdentifierList(IndustryIdentifier[] industryIdentifierList) {
-            this.industryIdentifierList = industryIdentifierList;
+        public void setIndustryIdentifiers(IndustryIdentifier[] industryIdentifiers) {
+            this.industryIdentifiers = industryIdentifiers;
         }
 
         public Long getPublisherDate() {
@@ -162,7 +157,7 @@ import java.util.Arrays;
         }
 
         public boolean isbnSetter(){
-            for (IndustryIdentifier identifier:industryIdentifierList) {
+            for (IndustryIdentifier identifier:industryIdentifiers) {
                 if (identifier.isbnExist()){
                     this.isbn = identifier.getIdentifier();
                     return true;
@@ -187,7 +182,6 @@ import java.util.Arrays;
                     ", averageRating=" + averageRating +
                     ", authors=" + Arrays.toString(authors) +
                     ", categories=" + Arrays.toString(categories) +
-                    ", industryIdentifierList=" + Arrays.toString(industryIdentifierList) +
                     '}';
         }
     }
