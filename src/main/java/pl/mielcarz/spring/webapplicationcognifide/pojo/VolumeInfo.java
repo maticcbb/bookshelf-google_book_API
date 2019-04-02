@@ -1,21 +1,17 @@
 package pl.mielcarz.spring.webapplicationcognifide.pojo;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import pl.mielcarz.spring.webapplicationcognifide.pojo.IndustryIdentifier;
 
-
 import java.util.Arrays;
-
 
     @JsonPropertyOrder({
             "isbn",
             "title",
             "publisher",
             "subtitle",
-            "publisher",
+            "publisherDate",
             "description",
             "pageCount",
             "thumbnailUrl",
@@ -31,7 +27,6 @@ import java.util.Arrays;
     @JsonInclude(JsonInclude.Include.NON_NULL)
 
     public class VolumeInfo {
-
 
         private String isbn;
         private String title;
@@ -105,7 +100,6 @@ import java.util.Arrays;
             this.previewLink = previewLink;
         }
 
-
         public String getSubtitle() {
             return subtitle;
         }
@@ -161,7 +155,6 @@ import java.util.Arrays;
         public void setCategories(String[] categories) {
             this.categories = categories;
         }
-
 
 
         @Override
