@@ -3,6 +3,8 @@ package pl.mielcarz.spring.webapplicationcognifide.pojo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import pl.mielcarz.spring.webapplicationcognifide.deserializers.CustomDateDeserializer;
 import pl.mielcarz.spring.webapplicationcognifide.pojo.IndustryIdentifier;
 
 import java.util.Arrays;
@@ -12,7 +14,7 @@ import java.util.Arrays;
             "title",
             "publisher",
             "subtitle",
-            "publisherDate",
+            "publishedDate",
             "description",
             "pageCount",
             "thumbnailUrl",
@@ -21,8 +23,8 @@ import java.util.Arrays;
             "averageRating",
             "authors",
             "categories",
-            "industryIdentifiers",
-            "publishedDate"
+            "industryIdentifiers"
+
 
     })
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -33,7 +35,9 @@ import java.util.Arrays;
         private String title;
         private String subtitle;
         private String publisher;
-        private Long publisherDate;
+        @JsonDeserialize(using = CustomDateDeserializer.class)
+        @JsonProperty("publishedDate")
+        private Long publishedDate;
         private String description;
         private String pageCount;
         private String thumbnailUrl;
@@ -45,7 +49,6 @@ import java.util.Arrays;
         @JsonProperty("industryIdentifiers")
         private IndustryIdentifier[] industryIdentifierList;
 
-
         public IndustryIdentifier[] getIndustryIdentifierList() {
             return industryIdentifierList;
         }
@@ -55,11 +58,11 @@ import java.util.Arrays;
         }
 
         public Long getPublisherDate() {
-            return publisherDate;
+            return publishedDate;
         }
 
         public void setPublisherDate(Long publisherDate) {
-            this.publisherDate = publisherDate;
+            this.publishedDate = publisherDate;
         }
 
         public String getTitle() {
@@ -175,7 +178,7 @@ import java.util.Arrays;
                     ", title='" + title + '\'' +
                     ", subtitle='" + subtitle + '\'' +
                     ", publisher='" + publisher + '\'' +
-                    ", publisherDate=" + publisherDate +
+                    ", publishedDate=" + publishedDate +
                     ", description='" + description + '\'' +
                     ", pageCount='" + pageCount + '\'' +
                     ", thumbnailUrl='" + thumbnailUrl + '\'' +
