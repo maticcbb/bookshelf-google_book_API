@@ -1,6 +1,7 @@
 package pl.mielcarz.spring.webapplicationcognifide.pojo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import pl.mielcarz.spring.webapplicationcognifide.pojo.IndustryIdentifier;
 
@@ -41,6 +42,7 @@ import java.util.Arrays;
         private double averageRating;
         private String[] authors;
         private String[] categories;
+        @JsonProperty("industryIdentifiers")
         private IndustryIdentifier[] industryIdentifierList;
 
 
@@ -156,6 +158,15 @@ import java.util.Arrays;
             this.categories = categories;
         }
 
+        public boolean isbnSetter(){
+            for (IndustryIdentifier identifier:industryIdentifierList) {
+                if (identifier.isbnExist()){
+                    this.isbn = identifier.getIdentifier();
+                    return true;
+                }
+            }
+            return false;
+        }
 
         @Override
         public String toString() {

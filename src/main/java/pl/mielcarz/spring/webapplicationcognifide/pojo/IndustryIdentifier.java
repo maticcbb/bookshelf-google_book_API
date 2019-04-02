@@ -35,4 +35,11 @@ public class IndustryIdentifier {
                 ", identifier='" + identifier + '\'' +
                 '}';
     }
+
+    public boolean isbnExist(){
+        if (this.type.equals("ISBN_13")){
+            return true;
+        }
+        else return false;
+    }
 }
