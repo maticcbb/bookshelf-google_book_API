@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.DoubleNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.mielcarz.spring.webapplicationcognifide.pojo.IndustryIdentifier;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class VolumeInfoObjectMapper {
 
@@ -77,6 +79,7 @@ public class VolumeInfoObjectMapper {
         });
     }
 
+
     /**
      * Methode get deserialized list of books and return properties and serialized it to JSON wihout null properties.
      */
@@ -102,8 +105,6 @@ public class VolumeInfoObjectMapper {
         return resultList;
     }
 
-
-
     public List<VolumeInfo> findCategories(VolumeInfoObjectMapper volumeInfoObjectMapper, String category) throws JsonProcessingException {
         List<VolumeInfo> resultList;
 
@@ -115,6 +116,19 @@ public class VolumeInfoObjectMapper {
 
         return resultList;
     }
+
+/*    public List<VolumeInfo> showRatings(VolumeInfoObjectMapper volumeInfoObjectMapper) throws JsonProcessingException {
+        List<VolumeInfo> resultList;
+
+        volumeInfoObjectMapper.serializeToJsonWithoutNulls().stream()
+                .filter(n -> n.getAuthors().)
+                .collect(Collectors.toList());
+
+
+
+
+        return resultList;
+    }*/
 
 
 }
