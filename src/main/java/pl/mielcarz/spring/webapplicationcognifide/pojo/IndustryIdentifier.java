@@ -36,6 +36,10 @@ public class IndustryIdentifier {
                 '}';
     }
 
+    /**
+     * Check if field type has ISBN_13 property
+     * @return boolean
+     */
     public boolean isbnExist(){
         if (this.type.equals("ISBN_13")){
             return true;

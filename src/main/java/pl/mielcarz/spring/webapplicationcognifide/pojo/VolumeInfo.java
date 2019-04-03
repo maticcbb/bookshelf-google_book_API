@@ -162,6 +162,10 @@ import java.util.Arrays;
             return Arrays.stream(categoryArray).anyMatch(singleArray::equals);
         }
 
+        /**
+         * Set Id instead of ISBN_13 if its not existing ind object.
+         * @return boolean
+         */
         @JsonIgnore
         public boolean isbnSetter(){
             for (IndustryIdentifier identifier:industryIdentifiers) {

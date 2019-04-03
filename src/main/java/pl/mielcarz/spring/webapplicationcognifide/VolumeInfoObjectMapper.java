@@ -2,6 +2,7 @@ package pl.mielcarz.spring.webapplicationcognifide;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
@@ -12,6 +13,7 @@ import pl.mielcarz.spring.webapplicationcognifide.pojo.VolumeInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,6 +32,12 @@ public class VolumeInfoObjectMapper {
         serializeToJsonWithoutNulls();
 
     }
+
+    /**
+     * Create only one instance of this class
+     * @return {@code single_instance} of class
+     * @throws IOException
+     */
 
     public static VolumeInfoObjectMapper getInstance() throws IOException {
         if (single_instance == null)
@@ -62,10 +70,15 @@ public class VolumeInfoObjectMapper {
         this.volumeInfoList = volumeInfoList;
     }
 
+
+    /**
+     * Read whole book.json file from prepared roots. Making a list of objects and return it. Also check if {@code ISBN_13} property exist, if not set {@code Id} instead of it.
+     * @throws IOException
+     */
     public void readJsonWithObjectMapper() throws IOException {
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
-        JsonNode root = objectMapper.readTree(new File("books.json")); // read as JsonNode
+        InputStream inputStream = TypeReference.class.getResourceAsStream("/json/books.json");
+        JsonNode root = objectMapper.readTree(inputStream); // read as JsonNode
         JsonNode itemsRoot = root.at("/items");
 
         ArrayNode array = (ArrayNode) itemsRoot;
@@ -78,7 +91,6 @@ public class VolumeInfoObjectMapper {
             volumeInfoList.add(volumeInfo);
         });
     }
-
 
     /**
      * Methode get deserialized list of books and return properties and serialized it to JSON wihout null properties.
@@ -93,42 +105,7 @@ public class VolumeInfoObjectMapper {
         return filterSortedVolume;
     }
 
-    public List<VolumeInfo> findByISBN(VolumeInfoObjectMapper volumeInfoObjectMapper, String isbn) throws JsonProcessingException {
-        List<VolumeInfo> resultList;
 
-        resultList =
-                volumeInfoObjectMapper.serializeToJsonWithoutNulls()
-                        .stream()
-                        .filter(p -> p.getIsbn().equals(isbn))
-                        .collect(Collectors.toList());
-
-        return resultList;
-    }
-
-    public List<VolumeInfo> findCategories(VolumeInfoObjectMapper volumeInfoObjectMapper, String category) throws JsonProcessingException {
-        List<VolumeInfo> resultList;
-
-        resultList =
-                volumeInfoObjectMapper.serializeToJsonWithoutNulls()
-                        .stream()
-                        .filter(n -> n.categoryExist(n.getCategories(), category))
-                        .collect(Collectors.toList());
-
-        return resultList;
-    }
-
-/*    public List<VolumeInfo> showRatings(VolumeInfoObjectMapper volumeInfoObjectMapper) throws JsonProcessingException {
-        List<VolumeInfo> resultList;
-
-        volumeInfoObjectMapper.serializeToJsonWithoutNulls().stream()
-                .filter(n -> n.getAuthors().)
-                .collect(Collectors.toList());
-
-
-
-
-        return resultList;
-    }*/
 
 
 }

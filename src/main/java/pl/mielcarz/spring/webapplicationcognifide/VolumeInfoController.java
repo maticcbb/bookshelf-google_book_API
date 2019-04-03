@@ -26,6 +26,7 @@ public class VolumeInfoController {
 
     {
         try {
+            //Initialize one instance of volumeObjectMapper class
             volumeInfoObjectMapper = VolumeInfoObjectMapper.getInstance();
         } catch (IOException e) {
             e.printStackTrace();
@@ -33,34 +34,58 @@ public class VolumeInfoController {
     }
 
 
-    @RequestMapping(value = "/obj", method = GET)
-    @ResponseBody
-    public List<VolumeInfo> getFoosBySimpleP() throws IOException {
-        volumeInfoObjectMapper.getObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-        return volumeInfoObjectMapper.serializeToJsonWithoutNulls();
-    }
-
+    /**
+     * Return book from list by ISBN (or Id if ISBN not exist).
+     * @param id
+     * @return resultList
+     * @throws JsonProcessingException
+     */
     @RequestMapping(value = "/books/isbn/{id}", method = GET)
     @ResponseBody
     public List<VolumeInfo> getByISBN(
             @PathVariable("id") String id) throws JsonProcessingException {
+        List<VolumeInfo> resultList;
 
-        return volumeInfoObjectMapper.findByISBN(volumeInfoObjectMapper, id);
+        resultList =
+                volumeInfoObjectMapper.serializeToJsonWithoutNulls()
+                        .stream()
+                        .filter(p -> p.getIsbn().equals(id))
+                        .collect(Collectors.toList());
+
+        return resultList;
     }
 
+    /**
+     * Return list of books that has category by giving URL parameter.
+     * @param category
+     * @return resultList
+     * @throws JsonProcessingException
+     */
     @RequestMapping(value = "/books/category/{category}", method = GET)
     @ResponseBody
     public List<VolumeInfo> getByCategory(
             @PathVariable("category") String category) throws JsonProcessingException {
 
-        return volumeInfoObjectMapper.findCategories(volumeInfoObjectMapper, category);
+        List<VolumeInfo> resultList;
+
+        resultList =
+                volumeInfoObjectMapper.serializeToJsonWithoutNulls()
+                        .stream()
+                        .filter(n -> n.categoryExist(n.getCategories(), category))
+                        .collect(Collectors.toList());
+
+        return resultList;
     }
 
+    /**
+     *Return list of objects with authors and rating properties
+     * @throws JsonProcessingException
+     */
     @RequestMapping(value = "/books/rating", method = GET)
     @ResponseBody
     public Set<Serializable> getRatings() throws JsonProcessingException {
-       return volumeInfoObjectMapper.serializeToJsonWithoutNulls().stream()
-                .flatMap(p -> Stream.of(p.getAuthors(),p.getAverageRating()))
+        return volumeInfoObjectMapper.serializeToJsonWithoutNulls().stream()
+                .flatMap(p -> Stream.of(p.getAuthors(), p.getAverageRating()))
                 .collect(Collectors.toSet());
 
     }
