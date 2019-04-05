@@ -1,9 +1,6 @@
 package pl.mielcarz.spring.webapplicationcognifide.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import pl.mielcarz.spring.webapplicationcognifide.deserializers.CustomDateDeserializer;
 import pl.mielcarz.spring.webapplicationcognifide.pojo.IndustryIdentifier;
@@ -27,7 +24,6 @@ import java.util.Arrays;
 
     })
     @JsonInclude(JsonInclude.Include.NON_NULL)
-
     public class VolumeInfo {
 
         private String isbn;
@@ -51,9 +47,6 @@ import java.util.Arrays;
             this.industryIdentifiers = industryIdentifiers;
         }
 
-        public Long getPublisherDate() {
-            return publishedDate;
-        }
 
         public void setPublisherDate(Long publisherDate) {
             this.publishedDate = publisherDate;

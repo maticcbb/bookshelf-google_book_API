@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import pl.mielcarz.spring.webapplicationcognifide.pojo.VolumeInfo;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 import java.io.IOException;
 import java.util.Set;
@@ -83,10 +84,10 @@ public class VolumeInfoController {
      */
     @RequestMapping(value = "/books/rating", method = GET)
     @ResponseBody
-    public Set<Serializable> getRatings() throws JsonProcessingException {
-        return volumeInfoObjectMapper.serializeToJsonWithoutNulls().stream()
+    public List<Serializable> getRatings() throws JsonProcessingException {
+        return volumeInfoObjectMapper.serializeToJsonWithoutNulls().stream().sorted(Comparator.comparing(VolumeInfo::getAverageRating).reversed())
                 .flatMap(p -> Stream.of(p.getAuthors(), p.getAverageRating()))
-                .collect(Collectors.toSet());
+               .collect(Collectors.toList());
 
     }
 
