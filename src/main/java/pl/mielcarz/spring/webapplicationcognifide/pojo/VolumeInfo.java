@@ -26,6 +26,7 @@ import java.util.Arrays;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public class VolumeInfo {
 
+
         private String isbn;
         private String title;
         private String subtitle;
@@ -47,6 +48,10 @@ import java.util.Arrays;
             this.industryIdentifiers = industryIdentifiers;
         }
 
+        @JsonIgnore
+        public Long getPublisherDate() {
+            return publishedDate;
+        }
 
         public void setPublisherDate(Long publisherDate) {
             this.publishedDate = publisherDate;
@@ -148,11 +153,17 @@ import java.util.Arrays;
             this.categories = categories;
         }
 
-        public boolean categoryExist(String[] categoryArray, String singleArray) {
+        /**
+         * Check if {@code singleCategory String}  exist in {@code CategoryArray}
+         * @param categoryArray
+         * @param singleCategory
+         * @return boolean
+         */
+        public boolean categoryExist(String[] categoryArray, String singleCategory) {
             if(categoryArray == null){
             return false;
         }
-            return Arrays.stream(categoryArray).anyMatch(singleArray::equals);
+            return Arrays.stream(categoryArray).anyMatch(singleCategory::equals);
         }
 
         /**
