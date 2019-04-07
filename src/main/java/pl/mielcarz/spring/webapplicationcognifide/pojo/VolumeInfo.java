@@ -43,9 +43,18 @@ import java.util.Arrays;
         private String[] authors;
         private String[] categories;
         private IndustryIdentifier[] industryIdentifiers;
+        private ImageLinks imageLinks;
 
         public void setIndustryIdentifiers(IndustryIdentifier[] industryIdentifiers) {
             this.industryIdentifiers = industryIdentifiers;
+        }
+
+        public ImageLinks getImageLinks() {
+            return imageLinks;
+        }
+
+        public void setImageLinks(ImageLinks imageLinks) {
+            this.imageLinks = imageLinks;
         }
 
         @JsonIgnore
