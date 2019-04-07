@@ -4,10 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import pl.mielcarz.spring.webapplicationcognifide.pojo.VolumeInfo;
 
 import java.io.Serializable;
@@ -37,6 +35,7 @@ public class VolumeInfoController {
 
     /**
      * Return book from list by ISBN (or Id if ISBN not exist).
+     *
      * @param id
      * @return resultList
      * @throws JsonProcessingException
@@ -58,14 +57,14 @@ public class VolumeInfoController {
 
     /**
      * Return list of books that has category by giving URL parameter.
+     *
      * @param category
      * @return resultList
      * @throws JsonProcessingException
      */
     @RequestMapping(value = "/books/category/{category}", method = GET)
-    @ResponseBody
-    public List<VolumeInfo> getByCategory(
-            @PathVariable("category") String category) throws JsonProcessingException {
+    public String getByCategory(
+            @PathVariable("category") String category , Model model) throws JsonProcessingException {
 
         List<VolumeInfo> resultList;
 
@@ -74,12 +73,15 @@ public class VolumeInfoController {
                         .stream()
                         .filter(n -> n.categoryExist(n.getCategories(), category))
                         .collect(Collectors.toList());
-
-        return resultList;
+        // Add list to the view attribute
+        model.addAttribute("bookList",resultList);
+        // For tests
+        return "hello";
     }
 
     /**
-     *Return list of objects with authors and rating properties
+     * Return list of objects with authors and rating properties
+     *
      * @throws JsonProcessingException
      */
     @RequestMapping(value = "/books/rating", method = GET)
@@ -87,8 +89,8 @@ public class VolumeInfoController {
     public List<Serializable> getRatings() throws JsonProcessingException {
         return volumeInfoObjectMapper.serializeToJsonWithoutNulls().stream().sorted(Comparator.comparing(VolumeInfo::getAverageRating).reversed())
                 .flatMap(p -> Stream.of(p.getAuthors(), p.getAverageRating()))
-               .collect(Collectors.toList());
-
+                .collect(Collectors.toList());
     }
+
 
 }

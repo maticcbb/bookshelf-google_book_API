@@ -30,11 +30,11 @@ public class VolumeInfoObjectMapper {
         this.volumeInfoList = new ArrayList<>();
         this.readJsonWithObjectMapper();
         serializeToJsonWithoutNulls();
-
     }
 
     /**
      * Create only one instance of this class
+     *
      * @return {@code single_instance} of class
      * @throws IOException
      */
@@ -70,9 +70,9 @@ public class VolumeInfoObjectMapper {
         this.volumeInfoList = volumeInfoList;
     }
 
-
     /**
      * Read whole book.json file from prepared roots. Making a list of objects and return it. Also check if {@code ISBN_13} property exist, if not set {@code Id} instead of it.
+     *
      * @throws IOException
      */
     public void readJsonWithObjectMapper() throws IOException {
@@ -104,9 +104,6 @@ public class VolumeInfoObjectMapper {
 
         return filterSortedVolume;
     }
-
-
-
 
 }
 
