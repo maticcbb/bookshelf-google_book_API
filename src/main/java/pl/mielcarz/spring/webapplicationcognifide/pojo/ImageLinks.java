@@ -1,5 +1,6 @@
 package pl.mielcarz.spring.webapplicationcognifide.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

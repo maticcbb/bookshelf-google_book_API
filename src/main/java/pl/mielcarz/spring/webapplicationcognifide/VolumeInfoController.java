@@ -1,8 +1,6 @@
 package pl.mielcarz.spring.webapplicationcognifide;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +10,6 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 import java.io.IOException;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,13 +34,12 @@ public class VolumeInfoController {
      * Return book from list by ISBN (or Id if ISBN not exist).
      *
      * @param id
-     * @return resultList
+     * @return book.html
      * @throws JsonProcessingException
      */
     @RequestMapping(value = "/books/isbn/{id}", method = GET)
-    @ResponseBody
-    public List<VolumeInfo> getByISBN(
-            @PathVariable("id") String id) throws JsonProcessingException {
+    public String getByISBN(
+            @PathVariable("id") String id ,  Model model) throws JsonProcessingException {
         List<VolumeInfo> resultList;
 
         resultList =
@@ -52,14 +48,16 @@ public class VolumeInfoController {
                         .filter(p -> p.getIsbn().equals(id))
                         .collect(Collectors.toList());
 
-        return resultList;
+        model.addAttribute("singleBook",resultList);
+
+        return "book";
     }
 
     /**
      * Return list of books that has category by giving URL parameter.
      *
      * @param category
-     * @return resultList
+     * @return category.html
      * @throws JsonProcessingException
      */
     @RequestMapping(value = "/books/category/{category}", method = GET)
@@ -75,8 +73,7 @@ public class VolumeInfoController {
                         .collect(Collectors.toList());
         // Add list to the view attribute
         model.addAttribute("bookList",resultList);
-        // For tests
-        return "hello";
+        return "category";
     }
 
     /**
@@ -87,7 +84,9 @@ public class VolumeInfoController {
     @RequestMapping(value = "/books/rating", method = GET)
     @ResponseBody
     public List<Serializable> getRatings() throws JsonProcessingException {
-        return volumeInfoObjectMapper.serializeToJsonWithoutNulls().stream().sorted(Comparator.comparing(VolumeInfo::getAverageRating).reversed())
+        return volumeInfoObjectMapper.serializeToJsonWithoutNulls()
+                .stream()
+                .sorted(Comparator.comparing(VolumeInfo::getAverageRating).reversed())
                 .flatMap(p -> Stream.of(p.getAuthors(), p.getAverageRating()))
                 .collect(Collectors.toList());
     }
