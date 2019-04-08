@@ -9,6 +9,16 @@
 <body>
 <div class="container">
     <div class="row">
+            <div class="form-group">
+                <label for="sel1">Select category:</label>
+                <select class="form-control" id="sel1" onchange="change_url(this.value);">
+                    <option value="" selected="selected" hidden="hidden">Choose here</option>
+                    <option value="http://localhost:8080/books/category/Computers">Computers</option>
+                    <option value="http://localhost:8080/books/category/Java">Java</option>
+                </select>
+            </div>
+    </div>
+    <div class="row">
         <div th:each="book : ${bookList}" class="col-sm-6 col-md-4 col-xl-3">
                 <div class="card mx-auto my-2 m-lg-2" style="width: 14rem;">
                 <a th:href="@{'/books/isbn/'+ ${book.getIsbn()}}"><img th:src="${book.getImageLinks().getThumbnail()}"
@@ -25,5 +35,10 @@
 <script src="../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
 <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
 <script src="../static/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+<script type="text/javascript">
+    function change_url(val) {
+        window.location=val;
+    }
+</script>
 </body>
 </html>
