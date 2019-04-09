@@ -31,7 +31,6 @@ public class VolumeInfo {
     private String subtitle;
     private String publisher;
     @JsonDeserialize(using = CustomDateDeserializer.class)
-    @JsonProperty("publishedDate")
     private Long publishedDate;
     private String description;
     private String pageCount;
@@ -56,7 +55,6 @@ public class VolumeInfo {
         this.imageLinks = imageLinks;
     }
 
-    @JsonIgnore
     public Long getPublisherDate() {
         return publishedDate;
     }
@@ -192,6 +190,7 @@ public class VolumeInfo {
         }
         return false;
     }
+
 
     @Override
     public String toString() {

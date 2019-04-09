@@ -11,10 +11,9 @@
     <div class="row">
             <div class="form-group">
                 <label for="sel1">Select category:</label>
-                <select class="form-control" id="sel1" onchange="change_url(this.value);">
+                <select class="form-control" id="sel1" onchange="change_url(this.value);" >
                     <option value="" selected="selected" hidden="hidden">Choose here</option>
-                    <option value="http://localhost:8080/books/category/Computers">Computers</option>
-                    <option value="http://localhost:8080/books/category/Java">Java</option>
+                    <option th:each="category : ${categories}" th:text="${category}"></option>
                 </select>
             </div>
     </div>

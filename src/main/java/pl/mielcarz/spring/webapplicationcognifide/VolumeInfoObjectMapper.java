@@ -1,17 +1,12 @@
 package pl.mielcarz.spring.webapplicationcognifide;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.DoubleNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import pl.mielcarz.spring.webapplicationcognifide.pojo.IndustryIdentifier;
 import pl.mielcarz.spring.webapplicationcognifide.pojo.VolumeInfo;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -24,6 +19,7 @@ public class VolumeInfoObjectMapper {
     public List<VolumeInfo> volumeInfoList;
     private ObjectMapper objectMapper;
     private JsonNode jsonNode;
+    private String[] allCategories;
 
     private VolumeInfoObjectMapper() throws IOException {
         this.objectMapper = new ObjectMapper();
@@ -83,7 +79,6 @@ public class VolumeInfoObjectMapper {
 
         ArrayNode array = (ArrayNode) itemsRoot;
         array.forEach(n -> {
-
             VolumeInfo volumeInfo = objectMapper.convertValue(n.get("volumeInfo"), VolumeInfo.class);
             if (!volumeInfo.isbnSetter()) {
                 volumeInfo.setIsbn(n.path("id").textValue());

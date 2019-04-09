@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.mielcarz.spring.webapplicationcognifide.pojo.VolumeInfo;
 
 import java.io.Serializable;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,6 +18,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class VolumeInfoController {
 
     VolumeInfoObjectMapper volumeInfoObjectMapper;
+    /*String[] allCategories = volumeInfoObjectMapper.volumeInfoList.stream().map(VolumeInfo::getCategories).flatMap(Arrays::stream)
+            .distinct().toArray(String[]::new);*/
 
     {
         try {
@@ -39,7 +40,7 @@ public class VolumeInfoController {
      */
     @RequestMapping(value = "/books/isbn/{id}", method = GET)
     public String getByISBN(
-            @PathVariable("id") String id ,  Model model) throws JsonProcessingException {
+            @PathVariable("id") String id, Model model) throws JsonProcessingException {
         List<VolumeInfo> resultList;
 
         resultList =
@@ -48,7 +49,7 @@ public class VolumeInfoController {
                         .filter(p -> p.getIsbn().equals(id))
                         .collect(Collectors.toList());
 
-        model.addAttribute("singleBook",resultList);
+        model.addAttribute("singleBook", resultList);
 
         return "book";
     }
@@ -62,7 +63,7 @@ public class VolumeInfoController {
      */
     @RequestMapping(value = "/books/category/{category}", method = GET)
     public String getByCategory(
-            @PathVariable("category") String category , Model model) throws JsonProcessingException {
+            @PathVariable("category") String category, Model model) throws JsonProcessingException {
 
         List<VolumeInfo> resultList;
 
@@ -71,8 +72,22 @@ public class VolumeInfoController {
                         .stream()
                         .filter(n -> n.categoryExist(n.getCategories(), category))
                         .collect(Collectors.toList());
+
+
+        // Get list of all categories
+        String[] allCategories =
+                volumeInfoObjectMapper.volumeInfoList
+                .stream()
+                .map(VolumeInfo::getCategories)
+                .filter(i -> i != null)
+                .flatMap(Arrays::stream)
+                .distinct()
+                .toArray(String[]::new);
+
         // Add list to the view attribute
-        model.addAttribute("bookList",resultList);
+        model.addAttribute("bookList", resultList);
+        model.addAttribute("categories", allCategories);
+        
         return "category";
     }
 
