@@ -21,7 +21,7 @@ public class VolumeInfoTest {
         String[] categories = {"Java", "Computer", "Dummies", "Mobile Technologies"};
 
         assertTrue(volumeInfo.categoryExist(categories, singleCategory));
-    }
+}
 
    /* @ParameterizedTest
     @MethodSource(value = "provideIsbn")
